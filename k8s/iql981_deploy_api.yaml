@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iql981-api-deployment
+  labels:
+    app: iql981-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: iql981-api
+  template:
+    metadata:
+      labels:
+        app: iql981-api
+    spec:
+      containers:
+        - name: iql981-api-c
+          image: blopez01/iql981-api
+          ports:
+            - containerPort: 3306
+      imagePullSecrets:
+          - name: iql981-dockerhub

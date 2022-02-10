@@ -1,0 +1,35 @@
+---
+build-job:
+  stage: build
+  script:
+    - echo "Building project..."
+    - npm i
+
+unit-test-job:
+  stage: test
+  needs: [build-job]
+  script:
+    - echo "Running unit tests..."
+    - npm install mocha
+    - npm test
+
+curl-test-job:
+  stage: test
+  script:
+    - echo "Running CURL tests..."
+
+deploy-job:
+  stage: deploy
+  script:
+    - echo "if we made it to this point then all tests passed OR none yet exist :)"
+    - echo "Deploying to class server..."
+    - echo "$API_CONFIG" > ./.env
+    - docker build -t blopez01/iql981-api:latest -f ./Dockerfile_api .
+    - docker login -u blopez01 -p "$DOCKERHUB_TOKEN"
+    - docker push blopez01/iql981-api:latest
+    - echo "$K8S_CONFIG" > ./config
+    - kubectl apply -f k8s/iql981_deploy_api.yaml --kubeconfig ./config
+    - kubectl rollout restart deployment/iql981-api-deployment --kubeconfig ./config
+    - kubectl get services --kubeconfig ./config
+    - kubectl get deployments --kubeconfig ./config
+...

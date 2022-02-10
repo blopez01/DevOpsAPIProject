@@ -1,0 +1,290 @@
+{"openapi": "3.0.0",
+  "info": {
+    "title": "CS 4783 DevOps Project",
+    "description": "Ben's CS 4783 Devops Project implemented in Javascript with Express",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://10.100.126.22:8080/",
+      "description": "My dev server"
+    }
+  ],
+  "components": {
+    "securitySchemes" : {
+      "apiKey" : {
+        "type": "apiKey",
+        "in" : "header",
+        "name" : "api-key"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Endpoints",
+      "description": "How to use all the endpoints in my API"
+    }
+  ],
+  "paths": {
+    "/hello": {
+      "get": {
+        "summary": "A simple hello without the world",
+        "description": "Return a hello response",
+        "tags": [
+          "Endpoints"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    },
+    "/swagger.json": {
+      "get": {
+        "summary": "Prints out contents of the swagger.json file",
+        "description": "Returns swagger.json in raw JSON",
+        "tags": [
+          "Endpoints"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    },
+    "/properties": {
+      "get": {
+        "summary": "Requests all properties",
+        "description": "Returns a list of stored US properties (id, address, and zip) ordered by ID.",
+        "tags": [
+          "Endpoints"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/Properties"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No properties found"
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a property",
+        "description": "Add a property. Address must be between 1 and 255 chars. City must be between 1 and 50 chars. State must be exactly 2 chars. Zip must be between 5 and 10 chars. All fields are required. The system will auto-assign a unique id to the new property.",
+        "tags": [
+          "Endpoints"
+        ],
+        "security": [
+          {
+            "apiKey" : []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "address",
+            "in": "body",
+            "description": "Address of new property",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "city",
+            "in": "body",
+            "description": "City new property is located",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "state",
+            "in": "body",
+            "description": "State new property is located",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "zip",
+            "in": "body",
+            "description": "Zip code new property is located",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No properties found"
+          }
+        }
+      }
+    },
+    "/properties/{id}": {
+      "get": {
+        "summary": "Request data for a specific property",
+        "description": "Return detailed info for the property with an id value of <id>.",
+        "tags": [
+          "Endpoints"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of property",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Property not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete data for a specific property",
+        "description": "Delete the property with an id value of <id>.",
+        "tags": [
+          "Endpoints"
+        ],
+        "security": [
+          {
+            "apiKey" : []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of property",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Property not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update data for a specific property",
+        "description": "Updates the property with an id value of <id>. Only the fields to be modified need be present in the response data.",
+        "tags": [
+          "Endpoints"
+        ],
+        "security": [
+          {
+            "apiKey" : []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "address",
+            "in": "body",
+            "description": "Address of new property",
+            "type": "string"
+          },
+          {
+            "name": "city",
+            "in": "body",
+            "description": "City new property is located",
+            "type": "string"
+          },
+          {
+            "name": "state",
+            "in": "body",
+            "description": "State new property is located",
+            "type": "string"
+          },
+          {
+            "name": "zip",
+            "in": "body",
+            "description": "Zip code new property is located",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Property not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Property": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "address":{
+          "type": "string"
+        },
+        "zip": {
+          "type": "string"
+        }
+      }
+    },
+    "Properties": {
+      "type": "array",
+      "items": "$ref/definitions/Property"
+    }
+  }
+}
